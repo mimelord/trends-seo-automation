@@ -23,16 +23,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install gspread oauth2client pytrends google-generativeai requests pandas
 
-      - name: Create Credentials Files from Secrets
+      - name: Create Credentials Files from GitHub Secrets
         env:
           SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           CLIENT_SECRET_JSON: ${{ secrets.CLIENT_SECRET_JSON }}
         run: |
-          echo "$SERVICE_ACCOUNT_JSON" > service_account.json
-          echo "$CLIENT_SECRET_JSON" > client_secret.json
+          echo '$SERVICE_ACCOUNT_JSON' > service_account.json
+          echo '$CLIENT_SECRET_JSON' > client_secret.json
 
       - name: Execute Trends Pipeline Script
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        python: python trends_pipeline.py
         run: python trends_pipeline.py
