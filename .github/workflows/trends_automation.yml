@@ -1,0 +1,38 @@
+name: 12-Hour Trends & SEO Automation
+
+on:
+  schedule:
+    - cron: '0 */12 * * *' # Runs every 12 hours (00:00 and 12:00 UTC)
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install gspread oauth2client pytrends google-generativeai requests pandas
+
+      - name: Create Credentials Files from Secrets
+        env:
+          SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          CLIENT_SECRET_JSON: ${{ secrets.CLIENT_SECRET_JSON }}
+        run: |
+          echo "$SERVICE_ACCOUNT_JSON" > service_account.json
+          echo "$CLIENT_SECRET_JSON" > client_secret.json
+
+      - name: Execute Trends Pipeline Script
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        python: python trends_pipeline.py
+        run: python trends_pipeline.py
