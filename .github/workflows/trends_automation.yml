@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout Repository Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.10
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -28,8 +28,8 @@ jobs:
           SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           CLIENT_SECRET_JSON: ${{ secrets.CLIENT_SECRET_JSON }}
         run: |
-          echo '$SERVICE_ACCOUNT_JSON' > service_account.json
-          echo '$CLIENT_SECRET_JSON' > client_secret.json
+          echo "$SERVICE_ACCOUNT_JSON" > service_account.json
+          echo "$CLIENT_SECRET_JSON" > client_secret.json
 
       - name: Execute Trends Pipeline Script
         env:
